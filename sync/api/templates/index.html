@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p>servo 1: <span id="servo1"></span></p>
+    <p>servo 2: <span id="servo2"></span></p>
+    <p>servo 3: <span id="servo3"></span></p>
+    <p>servo 4: <span id="servo4"></span></p>
+    <p>accel x: <span id="imuax"></span></p>
+    <p>accel y: <span id="imuay"></span></p>
+    <p>accel z: <span id="imuaz"></span></p>
+    <p>gyro x: <span id="imugx"></span></p>
+    <p>gyro y: <span id="imugy"></span></p>
+    <p>gyro z: <span id="imugz"></span></p>
+    <p>ground left: <span id="groundl"></span></p>
+    <p>ground right: <span id="groundr"></span></p>
+
+    <script>
+        const data_url = "/robot_data"
+        const fetch_data = () => {
+            fetch(data_url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    document.getElementById('servo1').innerHTML = data.servo1
+                    document.getElementById('servo2').innerHTML = data.servo2
+                    document.getElementById('servo3').innerHTML = data.servo3
+                    document.getElementById('servo4').innerHTML = data.servo4
+                    document.getElementById('imuax').innerHTML = data.imuax
+                    document.getElementById('imuay').innerHTML = data.imuay
+                    document.getElementById('imuaz').innerHTML = data.imuaz
+                    document.getElementById('imugx').innerHTML = data.imugx
+                    document.getElementById('imugy').innerHTML = data.imugy
+                    document.getElementById('imugz').innerHTML = data.imugz
+                    document.getElementById('groundl').innerHTML = data.groundl
+                    document.getElementById('groundr').innerHTML = data.groundr
+                })
+        }
+        const intervalID = window.setInterval(fetch_data, 100);
+    </script>
+
+</body>
+</html>
