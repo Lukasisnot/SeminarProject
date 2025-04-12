@@ -17,7 +17,6 @@ class Controller:
         logger = multiprocessing.get_logger()
         global sl
         sl = shared_memory.ShareableList(name=sharedListName)
-        # sl = shared_memory.ShareableList(sharedList)
 
         while True:
             self.updateServos()
@@ -32,7 +31,6 @@ class Controller:
     def readSensors(self):
         accel_data = self.imu.get_accel_data()
         gyro_data = self.imu.get_gyro_data()
-        # sl[4:] = accel_data['x'], accel_data['y'], accel_data['z'], gyro_data['x'], gyro_data['y'], gyro_data['z'], self.right_input.value, self.left_input.value
         sl[4] = accel_data['x']
         sl[5] = accel_data['y']
         sl[6] = accel_data['z']
