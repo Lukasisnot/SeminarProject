@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% import 'macros.html' as macros %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slider Example</title>
+</head>
+<body>
+
+    {% for i in range(4) %}
+        {{ macros.slider("servo" + (i + 1)|string, "Servo " + (i + 1)|string, 45, 135, 1, 90) }}
+    {% endfor %}
+
+</body>
+</html>

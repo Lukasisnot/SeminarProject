@@ -1,24 +1,22 @@
 import logging
-import multiprocessing
-import sys, os
+# import multiprocessing
+# import sys, os
 # import atexit
 # from multiprocessing.shared_memory import SharedMemory
 
-sys.path.append(os.path.abspath('..'))
-import roboControl.controller as RobotController
-from multiprocessing import Process, Value, Array, shared_memory
-from multiprocessing.managers import SharedMemoryManager, SyncManager
+# sys.path.append(os.path.abspath('..'))
+# import roboControl.controller as RobotController
+# from multiprocessing import Process, Value, Array, shared_memory
+# from multiprocessing.managers import SharedMemoryManager, SyncManager
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-smm = SharedMemoryManager()
-smm.start()
-sl = smm.ShareableList([90, 93, 83, 90, 0, 0, 0, 0, 0, 0, 0, 0])
+sl = [90, 90, 90, 90, 0, 0, 0, 0, 0, 0, 0, 0]
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('index_test.html')
 
 @app.route("/robot_data", methods=['GET', 'POST'])
 def getRobotData():
@@ -39,25 +37,15 @@ def getRobotData():
         }
     if request.method == 'POST':
         data = request.json
-        sl[int(data['id'])] =  int(data['servo'])
+        sl[0] =  int(data['servo'])
         logging.debug(data['servo'])
         return request.data
     # logger.debug(sl)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    multiprocessing.log_to_stderr(logging.DEBUG)
     logger = logging.getLogger("werkzeug")
     logger.setLevel(logging.DEBUG)
 
-    # Start the controller process
-    roboController = RobotController.Controller()
-    rcProcess = Process(target=roboController.controller_init, args=(sl.shm.name,))
-    rcProcess.start()
-
-    try:
-        app.run(host='0.0.0.0', debug=False, port=5000)
-    finally:
-        rcProcess.terminate()
-        rcProcess.join()
+    app.run(host='0.0.0.0', debug=True, port=5000)
 
