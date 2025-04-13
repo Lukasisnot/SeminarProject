@@ -4,12 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Slider Example</title>
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
+    <div class="container">
+        <div class="column">
+            <div class="container-servo">
+                <div class="column-servo">
+                    {{ macros.slider("servo" + 1|string, "LEFT LEG", 45, 135, 1, 90) }}
+                    {{ macros.slider("servo" + 2|string, "LEFT FOOT", 45, 135, 1, 90) }}
+                </div>
+                <div class="column-servo">
+                    {{ macros.slider("servo" + 3|string, "RIGHT LEG", 45, 135, 1, 90) }}
+                    {{ macros.slider("servo" + 4|string, "RIGHT FOOT", 45, 135, 1, 90) }}
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="container-servo">
+                <div class="column-servo column-imu">
+                    <h4 style="text-align: center">IMU LINEAR</h4>
+                    <p>x: <span id="imuax">0.0</span></p>
+                    <p>y: <span id="imuay">0.0</span></p>
+                    <p>z: <span id="imuaz">0.0</span></p>
+                </div>
+                <div class="column-servo column-imu">
+                    <h4 style="text-align: center">IMU ROTARY</h4>
+                    <p>x: <span id="imugx">0.0</span></p>
+                    <p>y: <span id="imugy">0.0</span></p>
+                    <p>z: <span id="imugz">0.0</span></p>
+                </div>
+                <div class="column-servo column-imu">
+                    <h4 style="text-align: center">GROUNDED</h4>
+                    <p>L: <span id="groundl">0</span></p>
+                    <p>R: <span id="groundr">0</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    {% for i in range(4) %}
-        {{ macros.slider("servo" + (i + 1)|string, "Servo " + (i + 1)|string, 45, 135, 1, 90) }}
-    {% endfor %}
+    <script>
+        const ref = () => { location.replace(location.href); }
+        const ref_interval = window.setInterval(ref, 500);
+    </script>
 
 </body>
 </html>

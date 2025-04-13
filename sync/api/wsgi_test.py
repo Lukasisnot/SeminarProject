@@ -1,13 +1,4 @@
 import logging
-# import multiprocessing
-# import sys, os
-# import atexit
-# from multiprocessing.shared_memory import SharedMemory
-
-# sys.path.append(os.path.abspath('..'))
-# import roboControl.controller as RobotController
-# from multiprocessing import Process, Value, Array, shared_memory
-# from multiprocessing.managers import SharedMemoryManager, SyncManager
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
