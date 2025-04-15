@@ -1,2 +1,2 @@
 # SeminarProject
-! inteded to run on RPi-5 !
+! Intended to run on RPi-5 !
