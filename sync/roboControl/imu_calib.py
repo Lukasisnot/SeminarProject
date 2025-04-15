@@ -32,4 +32,6 @@ def  imu_offsets():
     accel_offsets[0] += 9.81
 
     print('IMU Calibration Complete')
+    print('accel_offsets: ', accel_offsets)
+    print('gyro_offsets: ', gyro_offsets)
     return accel_offsets, gyro_offsets

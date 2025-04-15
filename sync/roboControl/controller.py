@@ -1,6 +1,7 @@
 # import multiprocessing
 import os
 import sys
+import time
 from multiprocessing import shared_memory
 from mpu6050 import mpu6050
 from adafruit_servokit import ServoKit
@@ -17,11 +18,14 @@ class Controller:
         self.right_input = gpiozero.Button(pin=17, pull_up=False)
         self.accel_offsets = [0.0, 0.0, 0.0]
         self.gyro_offsets = [0.0, 0.0, 0.0]
+        self.servo_offsets = [-1, 3, -7, 5]
 
     def controller_init(self, sharedListName):
         # logger = multiprocessing.get_logger()
         global sl
         sl = shared_memory.ShareableList(name=sharedListName)
+        self.updateServos()
+        time.sleep(2)
         self.accel_offsets, self.gyro_offsets = imu_offsets()
 
         while True:
@@ -31,7 +35,7 @@ class Controller:
 
     def updateServos(self):
         for i in range(4):
-            self.kit.servo[i].angle = sl[i]
+            self.kit.servo[i].angle = sl[i] + self.servo_offsets[i]
 
     def readSensors(self):
         accel_data = self.imu.get_accel_data()

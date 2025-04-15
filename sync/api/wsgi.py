@@ -5,15 +5,17 @@ import sys, os
 sys.path.append(os.path.abspath('..'))
 import roboControl.controller as robot_controller
 
-from multiprocessing import Process, Value, Array, shared_memory
-from multiprocessing.managers import SharedMemoryManager, SyncManager
-from flask import Flask, render_template, request, jsonify
+from multiprocessing import Process
+from multiprocessing.managers import SharedMemoryManager
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
 smm = SharedMemoryManager()
 smm.start()
-sl = smm.ShareableList([90, 93, 83, 90, 0, 0, 0, 0, 0, 0, 0, 0])
+sl = smm.ShareableList([90, 90, 90, 90, 0, 0, 0, 0, 0, 0, 0, 0])
+
+processes = []
 
 @app.route("/")
 def index():
@@ -47,19 +49,35 @@ def getRobotData():
         return request.data
     # logger.debug(sl)
 
+def newProcess(name, target, args):
+    process = Process(target=target, args=args, name=name)
+    process.start()
+    processes.append(process)
+    print("Made new control process: " + process.name)
+
+def findProcessByName(name):
+    for process in processes:
+        if process.name == name:
+            return process, True
+    return None, False
+
+def on_terminate():
+    for p in processes:
+        print("Terminating process: " + p.name)
+        p.terminate()
+        p.terminate()
+        p.join()
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    multiprocessing.log_to_stderr(logging.DEBUG)
     logger = logging.getLogger("werkzeug")
     logger.setLevel(logging.DEBUG)
+    multiprocessing.log_to_stderr(logging.DEBUG)
 
     roboController = robot_controller.Controller()
-    rcProcess = Process(target=roboController.controller_init, args=(sl.shm.name,))
-    rcProcess.start()
+    newProcess("robot_controller", roboController.controller_init, (sl.shm.name,))
 
     try:
         app.run(host='0.0.0.0', debug=False, port=5000)
     finally:
-        rcProcess.terminate()
-        rcProcess.join()
-
+        on_terminate()
