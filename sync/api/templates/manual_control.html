@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+{% import 'macros.html' as macros %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manual Control</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+        {{ macros.sensorData() }}
+        <div class="column">
+            <div class="container-servo">
+                <div class="column-servo">
+                    {{ macros.slider("servo" + 1|string, "LEFT LEG", 45, 135, 1, 90) }}
+                    {{ macros.slider("servo" + 2|string, "LEFT FOOT", 45, 135, 1, 90) }}
+                </div>
+                <div class="column-servo">
+                    {{ macros.slider("servo" + 4|string, "RIGHT FOOT", 45, 135, 1, 90) }}
+                    {{ macros.slider("servo" + 3|string, "RIGHT LEG", 45, 135, 1, 90) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data_url = "/robot_data"
+
+        fetch(data_url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                document.getElementById('servo1_value').innerHTML = data.servo1
+                slider1.value = data.servo1
+                document.getElementById('servo2_value').innerHTML = data.servo2
+                slider2.value = data.servo2
+                document.getElementById('servo3_value').innerHTML = data.servo3
+                slider3.value = data.servo3
+                document.getElementById('servo4_value').innerHTML = data.servo4
+                slider4.value = data.servo4
+            })
+
+        const fetch_data = () => {
+            fetch(data_url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    document.getElementById('imuax').innerHTML = parseFloat(data.imuax).toFixed(2)
+                    document.getElementById('imuay').innerHTML = parseFloat(data.imuay).toFixed(2)
+                    document.getElementById('imuaz').innerHTML = parseFloat(data.imuaz).toFixed(2)
+                    document.getElementById('imugx').innerHTML = parseFloat(data.imugx).toFixed(2)
+                    document.getElementById('imugy').innerHTML = parseFloat(data.imugy).toFixed(2)
+                    document.getElementById('imugz').innerHTML = parseFloat(data.imugz).toFixed(2)
+                    document.getElementById('groundl').innerHTML = parseInt(data.groundl) == 1 ? "True" : "False"
+                    document.getElementById('groundr').innerHTML = parseInt(data.groundr) == 1 ? "True" : "False"
+                })
+        }
+        const intervalID = window.setInterval(fetch_data, 100);
+
+        const slider1 = document.getElementById(`servo1_range`)
+        slider1.oninput = () => {
+            fetch(data_url, {
+                method: "POST",
+                body: JSON.stringify({
+                    id: 0,
+                    servo: slider1.value
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            });
+            document.getElementById('servo1_value').innerText = slider1.value;
+        }
+
+        const slider2 = document.getElementById(`servo2_range`)
+        slider2.oninput = () => {
+            fetch(data_url, {
+                method: "POST",
+                body: JSON.stringify({
+                    id: 1,
+                    servo: slider2.value
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            });
+            document.getElementById('servo2_value').innerText = slider2.value;
+        }
+
+        const slider3 = document.getElementById(`servo3_range`)
+        slider3.oninput = () => {
+            fetch(data_url, {
+                method: "POST",
+                body: JSON.stringify({
+                    id: 2,
+                    servo: slider3.value
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            });
+            document.getElementById('servo3_value').innerText = slider3.value;
+        }
+
+        const slider4 = document.getElementById(`servo4_range`)
+        slider4.oninput = () => {
+            fetch(data_url, {
+                method: "POST",
+                body: JSON.stringify({
+                    id: 3,
+                    servo: slider4.value
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            });
+            document.getElementById('servo4_value').innerText = slider4.value;
+        }
+    </script>
+</body>
+</html>

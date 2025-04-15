@@ -7,10 +7,33 @@
 <body>
 {% macro slider(id, label, min=0, max=100, step=1, value=50) %}
   <div style="margin: 2rem; text-align: center;">
-<!--      <label for="{{ id }}_range" style="font-weight: bold;"></label>-->
       <div class="slider-label" style="margin-bottom: 0.5rem;">{{ label }}: <span id="{{ id }}_value">{{ value }}</span></div>
       <input class="slider" type="range" id="{{ id }}_range" name="{{ id }}" min="{{ min }}" max="{{ max }}" step="{{ step }}" value="{{ value }}" oninput="document.getElementById('{{ id }}_value').innerText = this.value">
   </div>
+{% endmacro %}
+
+{% macro sensorData() %}
+    <div class="column">
+            <div class="container-servo">
+                <div class="column-servo column-imu">
+                    <h4 style="text-align: center">IMU LINEAR</h4>
+                    <p>x: <span id="imuax">0.0</span></p>
+                    <p>y: <span id="imuay">0.0</span></p>
+                    <p>z: <span id="imuaz">0.0</span></p>
+                </div>
+                <div class="column-servo column-imu">
+                    <h4 style="text-align: center">IMU ROTARY</h4>
+                    <p>x: <span id="imugx">0.0</span></p>
+                    <p>y: <span id="imugy">0.0</span></p>
+                    <p>z: <span id="imugz">0.0</span></p>
+                </div>
+                <div class="column-servo column-imu">
+                    <h4 style="text-align: center">GROUNDED</h4>
+                    <p>L: <span id="groundl">0</span></p>
+                    <p>R: <span id="groundr">0</span></p>
+                </div>
+            </div>
+        </div>
 {% endmacro %}
 </body>
 </html>
